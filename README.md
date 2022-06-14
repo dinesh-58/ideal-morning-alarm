@@ -1,1 +1,2 @@
-##test
+## test
+Program to find ideal morning alarm. Basically just copying [Sleep Calculator](https://sleep-calculator.com/) but I'm doing this to learn more, & test myself. Also, I have my browser set to be blocked after 10 pm so might as well make a simple .exe file to put on my desktop.
