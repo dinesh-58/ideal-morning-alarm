@@ -13,6 +13,7 @@ Program to find ideal morning alarm. Basically just copying [Sleep Calculator](h
 ---
 ### Extra Functions after finishing above ones
 - [ ] instead of time, if 'b' entered, go back to menu
+- [ ] Order functions based on which ones may get called 1st. To improve code readability.
 - [ ] for go to beds & power naps, add 15 mins as time to sleep. inform user about this
 - [ ] similar for wake up maybe. ask user to sleep 15 mins earlier. show this calculated time
 - [ ] Settings:

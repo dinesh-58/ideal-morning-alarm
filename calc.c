@@ -1,10 +1,9 @@
-#define _XOPEN_SOURCE 700
 #include<stdio.h>
 #include<conio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<time.h>
-int time_to_sleep=15;
+int time_to_sleep=10;  //change this manually here or in settings
 struct tm *p_cur_time=0,wake_time,*p_wake_time=0,custom_time; 
 void menu();
 void wake_x();
@@ -17,7 +16,9 @@ void main()
 {
     p_wake_time=&wake_time;
     menu();
-    
+    printf("\n\nCalculations are done assuming it will take %d minutes for you to fall asleep.",time_to_sleep);
+    printf("\nAdjust value if needed in settings or manually in code.");
+    getch(); 
 }
 
 void menu()
@@ -30,18 +31,18 @@ void menu()
     printf("4: When do I wake up if I have a power nap?\n");
     printf("s: Adjust settings\n");
     printf("e: Exit\n");
-    printf("   Enter choice ");
+    printf("\nEnter choice ");
     a=getch();
     a=='1'   ? wake_x()
     : a=='2' ? get_time(), input_time(), bed(&custom_time)
     : a=='3' ? get_time(), bed(p_cur_time)
-    : a=='4' ? power_nap() 
+    : a=='4' ? get_time(), power_nap() 
     : a=='s' ? settings()
     : a=='e' ? exit(0)
     : (printf("\nInvalid input. Try again\n\n"), menu());
     // i++;
-    // printf("\nTest for exit %d\n",i); //due to recursion, lines after the ternary one get executed
-    //as many times as menu() is called.
+    // printf("\nTest for exit %d\n",i); 
+    //due to recursion, lines after the ternary statement keep getting executed as long as invalid input is entered.
     //2 invalid inputs, 1 correct input =>  3 times printed
     //surprisingly, i++ only gets executed once. hmmm
     //might just have to use if else to use goto at this point
@@ -54,16 +55,16 @@ void wake_x()  //I want to wake at the following time
     //for loop's range might have to start from 1. instead of constantly printing get more sleep, print line at  6
     //cycles or last one to say to aim for this much or more sleep  
 }
-void input_time() //might have to initialize custom_time=cur_time
+void input_time() 
 {
     char am_pm[3];
     int h,m;
-    custom_time=*p_cur_time;   //done just to fill values of other members in struct.
-    //else error occurs
+    custom_time=*p_cur_time;   //done just to fill values of other members in struct. else error occurs
     printf("\nInput time in format like 9:10 pm  ");
     scanf("%d:%d %s",&h,&m,&am_pm);
     strlwr(am_pm);
-    if(am_pm=="pm" && h<12) h+=12;
+    if(strcmp(am_pm,"pm")==0 && h<12) h+=12;
+    else if(strcmp(am_pm,"am")==0 && h==12) h=0;
     custom_time.tm_hour=h;
     custom_time.tm_min=m;
     _mktime64(&custom_time);
@@ -73,8 +74,7 @@ void get_time()
     time_t my_time=time(NULL); //gets system time in EPOCH format
     p_cur_time=localtime(&my_time);
     p_cur_time->tm_isdst=0; //change to 1 if you use Daylight Savings 
-    wake_time=*p_cur_time;  //done just to fill values of other members in struct.
-    //else error occurs
+    wake_time=*p_cur_time;  //done just to fill values of other members in struct. else error occurs
 }
 void bed(struct tm *p_temp_time)
 {
@@ -90,11 +90,18 @@ void bed(struct tm *p_temp_time)
         printf("\n%s\t(%.1f hours)",buff,i*1.5);
         if(i==4) printf(" Try sleeping more than this.");
     }
-    getch();
 }
 void power_nap()
 {
-    printf("power_nap");
+    char nap[0][9];
+    wake_time.tm_min=p_cur_time->tm_min+time_to_sleep+20;
+    mktime(&wake_time);
+    strftime(nap[0],9,"%I:%M %p",&wake_time);
+    wake_time.tm_min=p_cur_time->tm_min+70;
+    mktime(&wake_time);
+    strftime(nap[1],9,"%I:%M %p",&wake_time);
+    printf("\nYou should set alarm to \n%s (quick 20 min nap) \nor %s (90 min nap. 1 full sleep cycle)",nap[0],nap[1]);
+    // add 20 mins or 90 to cur_time. account for 10 minutes to fall asleep
 }
 void settings() //could use pointer to change variable value locally but change would only be temporary. 
 //probably file handling to have it be permanent change
