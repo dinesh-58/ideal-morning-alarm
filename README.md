@@ -7,9 +7,9 @@ Program to find ideal morning alarm. Basically just copying [Sleep Calculator](h
     - [x] call same f'n used for 3, just change arguement to custom user input.
 - [x] 3. go to bed exactly now 
     - [x] convert to am/pm using strftime?
-- [ ] 4. power nap (wake up during N1,N2 stage or end of cycle)   
+- [x] 4. power nap (wake up during N1,N2 stage or end of cycle)   
 &nbsp; &nbsp; *check how the site has done this*
-    - [ ] doesn't show print statements inside main() along with getch. instead, ends automatically after few seconds
+    - [x] doesn't show print statements inside main() along with getch. instead, ends automatically after few seconds
 
 ---
 ### Extra Functions after finishing above ones

@@ -12,13 +12,14 @@ void power_nap();
 void settings();
 void get_time();
 void input_time();
-void main()
+int main()
 {
     p_wake_time=&wake_time;
     menu();
     printf("\n\nCalculations are done assuming it will take %d minutes for you to fall asleep.",time_to_sleep);
     printf("\nAdjust value if needed in settings or manually in code.");
     getch(); 
+    return 0;
 }
 
 void menu()
@@ -93,7 +94,7 @@ void bed(struct tm *p_temp_time)
 }
 void power_nap()
 {
-    char nap[0][9];
+    char nap[2][10];
     wake_time.tm_min=p_cur_time->tm_min+time_to_sleep+20;
     mktime(&wake_time);
     strftime(nap[0],9,"%I:%M %p",&wake_time);
