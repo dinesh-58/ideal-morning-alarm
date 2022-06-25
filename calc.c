@@ -56,16 +56,19 @@ void menu() {
 }
 void wake_x()  // I want to wake at the following time
 {
-  int i;
   char buff[9];
+  int i, time_value[2];
+  time_value[0] = p_cur_time->tm_hour * 60 + p_cur_time->tm_min; 
   // Ironically I am using wake_time struct to store ideal time to sleep.
   printf("Go to bed at: \n");
-  for (i=4; i<=6; i++)
+  for (i=6; i>=4; i--)
   {
     wake_time.tm_hour = custom_time.tm_hour;
     wake_time.tm_min = custom_time.tm_min - (i * 90) - time_to_sleep;
+    _mktime64(p_wake_time);
+    time_value[1] = wake_time.tm_hour * 60 + wake_time.tm_min;
 
-    if (_mktime64(p_wake_time) > _mktime64(p_cur_time)) {
+    if (time_value[1] >= time_value[0]) {
       //To only print a time value if it is past current time
       strftime(buff, 9, "%I:%M %p", p_wake_time);
       printf("\n %s \t (%.1f hours)", buff, i * 1.5);
@@ -73,6 +76,9 @@ void wake_x()  // I want to wake at the following time
       if (i == 4) printf("\t Try sleeping more than this");
     }
   }  
+  printf("\nPlease use choice 1 only when you are about to sleep.");
+  printf("\nCurrent system time is used to calculate viable sleep times.");
+  printf("\n So, some times  may not be shown if you use this quite earlier");
 }
 
 void input_time() {
