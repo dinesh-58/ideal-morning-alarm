@@ -56,7 +56,7 @@ void menu() {
 }
 void wake_x()  // I want to wake at the following time
 {
-  printf("wake_X");
+  printf("\nInput time in format like 7:10 am  ");
   // difftime(input_time, EPOCH value of ideal sleep cycles). show as long as
   // EPOCH value greater than cur_time for loop's range might have to start
   // from 1. instead of constantly printing get more sleep, print line at  6
@@ -99,6 +99,7 @@ void bed(struct tm *p_temp_time) {
   for (i = 4; i <= 6; i++) {
     p_wake_time->tm_hour = p_temp_time->tm_hour;
     p_wake_time->tm_min = (p_temp_time->tm_min) + (i * 90);
+    if (i==1) p_wake_time->tm_min += time_to_sleep;
 
     _mktime64(&wake_time);
     strftime(buff, 9, "%I:%M %p", p_wake_time);
@@ -109,16 +110,16 @@ void bed(struct tm *p_temp_time) {
 }
 void power_nap() {
   char nap[2][10];
+  int i, nap_duration;
 
-  wake_time.tm_min = p_cur_time->tm_min + time_to_sleep + 20;
-  mktime(&wake_time);
-  strftime(nap[0], 9, "%I:%M %p", &wake_time);
+  for (i = 0, nap_duration = 20; i <= 1; i++, nap_duration += 70) {
+    wake_time.tm_min = p_cur_time->tm_min + 20;
+    if (i==1) wake_time.tm_min += time_to_sleep;
+    mktime(&wake_time);
+    strftime(nap[i], 9, "%I:%M %p", &wake_time);
+  }
 
-  wake_time.tm_min = p_cur_time->tm_min + 70;
-  mktime(&wake_time);
-  strftime(nap[1], 9, "%I:%M %p", &wake_time);
-
-  printf("\nYou should set alarm to \n%s (quick 20 min nap), nap[0]"); 
+  printf("\nYou should set alarm to \n%s (quick 20 min nap)", nap[0]); 
   printf("\nor %s (90 min nap. 1 full sleep cycle)", nap[1]);
 }
 void settings()  // could use pointer to change variable value locally but
