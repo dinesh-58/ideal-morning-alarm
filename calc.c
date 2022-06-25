@@ -98,8 +98,7 @@ void bed(struct tm *p_temp_time) {
   printf("\nYou should set alarm to: \n");
   for (i = 4; i <= 6; i++) {
     p_wake_time->tm_hour = p_temp_time->tm_hour;
-    p_wake_time->tm_min = (p_temp_time->tm_min) + (i * 90);
-    if (i==1) p_wake_time->tm_min += time_to_sleep;
+    p_wake_time->tm_min = (p_temp_time->tm_min) + (i * 90) + time_to_sleep;
 
     _mktime64(&wake_time);
     strftime(buff, 9, "%I:%M %p", p_wake_time);
@@ -113,8 +112,7 @@ void power_nap() {
   int i, nap_duration;
 
   for (i = 0, nap_duration = 20; i <= 1; i++, nap_duration += 70) {
-    wake_time.tm_min = p_cur_time->tm_min + 20;
-    if (i==1) wake_time.tm_min += time_to_sleep;
+    wake_time.tm_min = p_cur_time->tm_min + nap_duration + time_to_sleep;
     mktime(&wake_time);
     strftime(nap[i], 9, "%I:%M %p", &wake_time);
   }
